@@ -1,8 +1,7 @@
-package com.kafka.eventsproducer.integration.controller;
+package com.kafka.eventsproducer.intg.controller;
 
 import com.kafka.eventsproducer.domain.Book;
 import com.kafka.eventsproducer.domain.LibraryEvent;
-import com.kafka.eventsproducer.domain.enums.EventType;
 import org.apache.kafka.clients.consumer.Consumer;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.common.serialization.IntegerDeserializer;
