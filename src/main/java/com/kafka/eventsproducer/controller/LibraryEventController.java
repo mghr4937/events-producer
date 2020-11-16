@@ -11,20 +11,22 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import javax.validation.Valid;
+
 
 import java.util.concurrent.ExecutionException;
 
 @RestController
 @Slf4j
-public class LibraryEventsController {
+public class LibraryEventController {
 
     @Autowired
     EventsProducer eventsProducer;
 
     @PostMapping("/v1/libraryEvent")
-    public ResponseEntity<LibraryEvent> postLibraryEvent(@RequestBody LibraryEvent libraryEvent) throws JsonProcessingException, ExecutionException, InterruptedException {
+    public ResponseEntity<LibraryEvent> postLibraryEvent(@RequestBody @Valid LibraryEvent libraryEvent) throws JsonProcessingException, ExecutionException, InterruptedException {
 
-          libraryEvent.setEventType(EventType.NEW);
+        libraryEvent.setEventType(EventType.NEW);
 //        invoke kafka producer
 //        ASYNC method
 //        eventsProducer.sendLibraryEvent(libraryEvent);
