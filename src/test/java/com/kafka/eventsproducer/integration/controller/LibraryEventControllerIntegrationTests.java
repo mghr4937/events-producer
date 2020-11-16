@@ -79,10 +79,43 @@ public class LibraryEventControllerIntegrationTests {
         assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
 
         ConsumerRecord<Integer, String> consumerRecord = KafkaTestUtils.getSingleRecord(consumer, "library-events");
-        String expectedRecord = "{\"id\":null,\"book\":{\"id\":123,\"name\":\"Kafka Using Spring Boot\",\"author\":\"Dummy\"},\"eventType\":\"NEW\"}";
+        String expectedRecord = "{\"id\":null,\"eventType\":\"NEW\",\"book\":{\"id\":123,\"name\":\"Kafka Using Spring Boot\",\"author\":\"Dummy\"}}";
         String value = consumerRecord.value();
         assertEquals(expectedRecord, value);
     }
+
+    @Test
+    @Timeout(5)
+    void putLibraryEvent() throws InterruptedException {
+        //given
+        Book book = Book.builder()
+                .id(334)
+                .author("Dilip")
+                .name("Kafka using Spring Boot")
+                .build();
+
+        LibraryEvent libraryEvent = LibraryEvent.builder()
+                .id(678)
+                .book(book)
+                .build();
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("content-type", MediaType.APPLICATION_JSON.toString());
+        HttpEntity<LibraryEvent> request = new HttpEntity<>(libraryEvent, headers);
+
+        //when
+        ResponseEntity<LibraryEvent> responseEntity = restTemplate.exchange("/v1/libraryEvent", HttpMethod.PUT, request, LibraryEvent.class);
+
+        //then
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+
+        ConsumerRecord<Integer, String> consumerRecord = KafkaTestUtils.getSingleRecord(consumer, "library-events");
+
+        String expectedRecord = "{\"id\":678,\"eventType\":\"UPDATE\",\"book\":{\"id\":334,\"name\":\"Kafka using Spring Boot\",\"author\":\"Dilip\"}}";
+        String value = consumerRecord.value();
+
+        assertEquals(expectedRecord, value);
+    }
+
 
 
 }

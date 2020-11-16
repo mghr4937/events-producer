@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import javax.validation.Valid;
@@ -39,6 +40,20 @@ public class LibraryEventController {
         eventsProducer.sendLibraryEventWithTopic(libraryEvent);
         return ResponseEntity.status(HttpStatus.CREATED).body(libraryEvent);
     }
+
+    //PUT
+    @PutMapping("/v1/libraryEvent")
+    public ResponseEntity<?> putLibraryEvent(@RequestBody @Valid LibraryEvent libraryEvent) throws JsonProcessingException, ExecutionException, InterruptedException {
+
+        if(libraryEvent.getId() == null){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Bad Request: Event Id null");
+        }
+
+        libraryEvent.setEventType(EventType.UPDATE);
+        eventsProducer.sendLibraryEventWithTopic(libraryEvent);
+        return ResponseEntity.status(HttpStatus.OK).body(libraryEvent);
+    }
+
 
 
 }
