@@ -27,3 +27,8 @@ curl -i \
 -d '{"id":null,"book":{"id":456,"name":"Kafka Using Spring Boot","author":"Dilip"}}' \
 -H "Content-Type: application/json" \
 -X PUT http://localhost:8080/v1/libraryEvent
+
+
+SETUP SSL
+---------------------
+https://github.com/dilipsundarraj1/kafka-for-developers-using-spring-boot/blob/master/Kafka_Security.md
